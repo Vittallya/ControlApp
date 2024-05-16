@@ -90,7 +90,7 @@
             // 
             // comboBox1
             // 
-            comboBox1.DataBindings.Add(new Binding("SelectedValue", mainBs, "ProductId", true));
+            comboBox1.DataBindings.Add(new Binding("SelectedItem", mainBs, "Product", true, DataSourceUpdateMode.OnPropertyChanged));
             comboBox1.DataSource = productsBs;
             comboBox1.DisplayMember = "Name";
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;

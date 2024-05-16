@@ -167,7 +167,7 @@
             // 
             // textBox3
             // 
-            textBox3.DataBindings.Add(new Binding("Text", bindingSource1, "Cost", true, DataSourceUpdateMode.OnValidation, null, "N2"));
+            textBox3.DataBindings.Add(new Binding("Text", bindingSource1, "Cost", true));
             textBox3.Font = new Font("Times New Roman", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             textBox3.Location = new Point(3, 22);
             textBox3.Name = "textBox3";

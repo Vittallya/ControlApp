@@ -31,6 +31,14 @@ internal class GenericRepository<TEntity, TDbModel>(AppDbContext dbContext) : IG
         return await _dbContext.SaveChangesAsync();
     }
 
+    public Task<List<TResult>> ExecuteSqlRaw<TResult>(string sql, params object[] sqlParams)
+        where TResult : class
+    {
+        var result = _dbContext
+            .Database.SqlQueryRaw<TResult>(sql, sqlParams).ToList();
+        return Task.FromResult(result);
+    }
+
     public async Task<int> DeleteItems(params int[] ids)
     {
         var tableName = _dbContext.GetTableName<TDbModel>();

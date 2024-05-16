@@ -23,6 +23,13 @@ public class ProductRepository : IProductsRepository
         return model.Id;
     }
 
+    public async Task<int> UpdateProductCount(int productId, int count)
+    {
+        var product = await _dbContext.Products.FindAsync(productId);
+        product!.Count += count;
+        return await _dbContext.SaveChangesAsync();
+    }
+
     public async Task DeleteProduct(int productId)
     {
         var product = await _dbContext.Products.FindAsync(productId);

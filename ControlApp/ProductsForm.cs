@@ -1,6 +1,5 @@
 ﻿using ControlApp.Core.Entities;
 using ControlApp.Extensions;
-using DocumentFormat.OpenXml.VariantTypes;
 
 namespace ControlApp;
 

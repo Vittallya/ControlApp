@@ -16,30 +16,34 @@ public partial class SalesDetails : UserControl, IEntityUserControl<ProductSaleE
         :this()
     {
         this._productsRepository = productsRepository;
-        this.Load += SalesDetails_Load;
-    }
-
-    private async void SalesDetails_Load(object? sender, EventArgs e)
-    {
-
-        var products = await _productsRepository.GetProducts();
-        productsBs.DataSource = products;
-
-        if (Entity.Id == 0 && products.Count > 0)
-        {
-            Entity.ProductId = products.First().Id;
-        }
-        else
-        {
-            Entity.ProductId = Entity.ProductId;
-        }
     }
 
     public ProductSaleEntity Entity { get; private set; }
 
-    public void SetupEntity(ProductSaleEntity entity)
+    public async void SetupEntity(ProductSaleEntity entity)
     {
+        var products = await _productsRepository.GetProducts();
+        productsBs.DataSource = products;
         mainBs.DataSource = entity;
         Entity = entity;
+
+        if(entity.Id == 0)
+        {
+            Entity.Product = products.First();
+        }
+
+    }
+    public async Task<bool> PostProcess()
+    {
+        if(Entity.Count > Entity.Product!.Count)
+        {
+            MessageBox.Show("Указанное количество проданного товара больше, чем по факту имеется");
+            return false;
+        }
+
+        Entity.TotalSum = Entity.Product!.Cost * Entity.Count;
+        Entity.ProductId = Entity.Product!.Id;
+        await _productsRepository.UpdateProductCount(Entity.ProductId, -Entity.Count);
+        return true;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ControlApp.Core.Entities;
+using ControlApp.Infrastructure.Models;
 using ControlApp.Interfaces;
 
 namespace ControlApp.UserControls;
@@ -6,13 +7,12 @@ namespace ControlApp.UserControls;
 public partial class ProductIncomeDetails : UserControl, IEntityUserControl<ProductIncomeEntity>
 {
     private readonly IProductsRepository _productsRepository = null!;
-
+    private IReadOnlyCollection<ProductEntity> _products;
     public ProductIncomeEntity Entity { get; private set; } = null!;
 
     public ProductIncomeDetails()
     {
         InitializeComponent();
-        this.Load += ProductIncomeDetails_Load;
     }
 
     public ProductIncomeDetails(IProductsRepository productsRepository)
@@ -20,21 +20,24 @@ public partial class ProductIncomeDetails : UserControl, IEntityUserControl<Prod
     {
         this._productsRepository = productsRepository;
     }
-
-    private async void ProductIncomeDetails_Load(object? sender, EventArgs e)
+    public async void SetupEntity(ProductIncomeEntity entity)
     {
-        var products = await _productsRepository.GetProducts();
-        productsBs.DataSource = products;
 
-        if(Entity.Id == 0 && products.Count > 0)
+        _products = await _productsRepository.GetProducts();
+        productsBs.DataSource = _products;
+        Entity = entity;
+        ProductIncomeBs.DataSource = entity;
+        if (entity.Id == 0)
         {
-            Entity.ProductId = products.First().Id;
+            Entity.ProductEntity = _products.First();
         }
     }
 
-    public void SetupEntity(ProductIncomeEntity entity)
+    public async Task<bool> PostProcess()
     {
-        Entity = entity;
-        ProductIncomeBs.DataSource = entity;
+        Entity.TotalSum = Entity.Count * Entity.ProductEntity!.Cost;
+        Entity.ProductId = Entity.ProductEntity!.Id;
+        await _productsRepository.UpdateProductCount(Entity.ProductId, Entity.Count);
+        return true;
     }
 }
