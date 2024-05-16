@@ -48,7 +48,6 @@
             pictureBox1 = new PictureBox();
             button3 = new Button();
             button1 = new Button();
-            richTextBox1 = new RichTextBox();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ProductSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -273,26 +272,11 @@
             button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
-            // richTextBox1
-            // 
-            richTextBox1.BackColor = SystemColors.Control;
-            richTextBox1.BorderStyle = BorderStyle.None;
-            richTextBox1.DetectUrls = false;
-            richTextBox1.Font = new Font("Times New Roman", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            richTextBox1.Location = new Point(75, 420);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.ReadOnly = true;
-            richTextBox1.ScrollBars = RichTextBoxScrollBars.None;
-            richTextBox1.Size = new Size(159, 52);
-            richTextBox1.TabIndex = 4;
-            richTextBox1.Text = "sghsfghsfgh";
-            // 
             // ProductDetailsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(796, 551);
-            Controls.Add(richTextBox1);
             Controls.Add(button1);
             Controls.Add(button3);
             Controls.Add(pictureBox1);
@@ -327,6 +311,5 @@
         private Label label10;
         private BindingSource ProductSource;
         private Label label7;
-        private RichTextBox richTextBox1;
     }
 }

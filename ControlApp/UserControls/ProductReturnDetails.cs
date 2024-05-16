@@ -28,13 +28,15 @@ public partial class ProductReturnDetails : UserControl, IEntityUserControl<Prod
 
 
     public ProductReturnEntity Entity { get; private set; }
-
+    private int previewProductId;
+    private int previewCount;
     public async void SetupEntity(ProductReturnEntity entity)
     {
         var products = await _productsRepository.GetProducts();
         productsBs.DataSource = products;
         mainBs.DataSource = entity;
         Entity = entity;
+        previewProductId = entity.ProductId;
         if (entity.Id == 0)
         {
             Entity.Product = products.First();
@@ -75,7 +77,24 @@ public partial class ProductReturnDetails : UserControl, IEntityUserControl<Prod
             return false;
         }
 
-        await _productsRepository.UpdateProductCount(Entity.ProductId, Entity.Count);
+        var productsCount = Entity.Product.Count;
+        var newProductCount = productsCount + Entity.Count;
+
+        if (Entity.Id > 0)
+        {
+            if(Entity.ProductId != previewProductId)
+            {
+
+                var previewProduct = await _productsRepository.GetById(previewProductId);
+                await _productsRepository.UpdateProductCount(previewProductId, previewProduct!.Count - previewCount);
+            }
+            else
+            {
+                newProductCount = productsCount - previewCount + Entity.Count;
+            }
+        }
+
+        await _productsRepository.UpdateProductCount(Entity.ProductId, newProductCount);
         return true;
     }
 }

@@ -20,12 +20,18 @@ public partial class ProductIncomeDetails : UserControl, IEntityUserControl<Prod
     {
         this._productsRepository = productsRepository;
     }
+
+    private int previewProductId;
+    private int previewCount;
+
     public async void SetupEntity(ProductIncomeEntity entity)
     {
 
         _products = await _productsRepository.GetProducts();
         productsBs.DataSource = _products;
         Entity = entity;
+        previewProductId = entity.ProductId;
+        previewCount = entity.Count;
         ProductIncomeBs.DataSource = entity;
         if (entity.Id == 0)
         {
@@ -37,7 +43,26 @@ public partial class ProductIncomeDetails : UserControl, IEntityUserControl<Prod
     {
         Entity.TotalSum = Entity.Count * Entity.ProductEntity!.Cost;
         Entity.ProductId = Entity.ProductEntity!.Id;
-        await _productsRepository.UpdateProductCount(Entity.ProductId, Entity.Count);
+
+        var productsCount = Entity.ProductEntity.Count;
+        var newProductCount = productsCount + Entity.Count;
+
+        if (Entity.Id > 0)
+        {
+            if (Entity.ProductId != previewProductId)
+            {
+
+                var previewProduct = await _productsRepository.GetById(previewProductId);
+                await _productsRepository.UpdateProductCount(previewProductId, previewProduct!.Count - previewCount);
+            }
+            else
+            {
+                newProductCount = productsCount - previewCount + Entity.Count;
+            }
+        }
+
+        await _productsRepository.UpdateProductCount(Entity.ProductId, newProductCount);
+
         return true;
     }
 }

@@ -25,6 +25,12 @@ public partial class ProductAddEditForm : Form
 
     private void button1_Click(object sender, EventArgs e)
     {
+        if(ProductEntity.Count < 0)
+        {
+            MessageBox.Show("Количество товара не может быть меньше 0");
+            return;
+        }
+
         DialogResult = DialogResult.OK;
     }
 
