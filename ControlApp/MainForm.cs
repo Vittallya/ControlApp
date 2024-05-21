@@ -56,7 +56,7 @@ public partial class MainForm : Form
     private async Task CreateReport<T>()
         where T : IEntity
     {
-        using var filePathForm = new OpenFileDialog()
+        using var filePathForm = new SaveFileDialog()
         {
             FileName = "report.docx",
             CheckFileExists = false,
@@ -75,7 +75,7 @@ public partial class MainForm : Form
 
     private async Task CreateProductReport()
     {
-        using var filePathForm = new OpenFileDialog()
+        using var filePathForm = new SaveFileDialog()
         {
             FileName = "report.docx",
             CheckFileExists = false,

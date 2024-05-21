@@ -80,7 +80,7 @@
             // 
             // button1
             // 
-            button1.Anchor = AnchorStyles.Bottom;
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button1.BackColor = SystemColors.ActiveCaption;
             button1.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             button1.ForeColor = Color.White;

@@ -11,4 +11,8 @@ public interface IProductsRepository
     Task DeleteProduct(int productId);
     Task<ProductEntity?> GetById(int productId);
     Task<int> UpdateProductCount(int productId, int count);
+
+    Task<int> IncreaceCount(int count, int productId);
+
+    Task<int> GetCount(int productId);
 }

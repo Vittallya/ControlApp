@@ -1,4 +1,5 @@
 ﻿using ControlApp.Core.Entities;
+using ControlApp.Core.Interfaces;
 using ControlApp.EF;
 using ControlApp.Infrastructure.Models;
 using ControlApp.Infrastructure.Repositories;
@@ -22,8 +23,14 @@ public static class ServiceCollectionExtensions
         });
         serviceCollection.AddTransient<IUserRepository, UserRepository>();
         serviceCollection.AddTransient<IProductsRepository, ProductRepository>();
-        serviceCollection.AddTransient<IGenericRepository<ProductIncomeEntity>, GenericRepository<ProductIncomeEntity, ProductIncome>>();
-        serviceCollection.AddTransient<IGenericRepository<ProductReturnEntity>, GenericRepository<ProductReturnEntity, ProductReturn>>();
-        serviceCollection.AddTransient<IGenericRepository<ProductSaleEntity>, GenericRepository<ProductSaleEntity, Sale>>();
+
+        serviceCollection.AddTransient<IProductSaleRepository, ProductSaleRepository>();
+        serviceCollection.AddTransient<IGenericRepository<ProductIncomeEntity>, ProductIncomeRepository>();
+
+        serviceCollection.AddTransient<IProductIncomeRepository, ProductIncomeRepository>();
+        serviceCollection.AddTransient<IGenericRepository<ProductReturnEntity>, ProductReturnRepository>();
+
+        serviceCollection.AddTransient<IProductReturnRepository, ProductReturnRepository>();
+        serviceCollection.AddTransient<IGenericRepository<ProductSaleEntity>, ProductSaleRepository>();
     }
 }

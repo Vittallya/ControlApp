@@ -11,9 +11,9 @@ internal class GenericRepository<TEntity, TDbModel>(AppDbContext dbContext) : IG
     where TEntity : IEntity
     where TDbModel : class, IModel, new()
 {
-    private readonly AppDbContext _dbContext = dbContext;
+    protected readonly AppDbContext _dbContext = dbContext;
 
-    public async Task<int> AddItem(TEntity entity)
+    public async Task<TEntity> AddItem(TEntity entity)
     {
 
         var model = new TDbModel();
@@ -21,7 +21,7 @@ internal class GenericRepository<TEntity, TDbModel>(AppDbContext dbContext) : IG
 
         await _dbContext.Set<TDbModel>().AddAsync(model);
         await _dbContext.SaveChangesAsync();
-        return model.Id;
+        return (TEntity)model.GetEntity();
     }
 
     public async Task<int> DeleteItem(int id)
@@ -81,5 +81,12 @@ internal class GenericRepository<TEntity, TDbModel>(AppDbContext dbContext) : IG
         var model = await _dbContext.Set<TDbModel>().FindAsync(entity.Id);
         model!.CopyFromEntiy(entity);
         return await _dbContext.SaveChangesAsync();
+    }
+
+
+    public async Task<TEntity> FindById(int id)
+    {
+        var model = await _dbContext.Set<TDbModel>().FindAsync(id);
+        return (TEntity)model!.GetEntity();
     }
 }

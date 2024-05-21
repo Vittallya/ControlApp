@@ -1,0 +1,1 @@
+﻿SELECT SUM(Count) as TotalCount FROM dbo.ProductReturns;

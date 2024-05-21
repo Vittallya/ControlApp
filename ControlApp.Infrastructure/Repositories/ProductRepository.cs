@@ -2,6 +2,7 @@
 using ControlApp.EF;
 using ControlApp.Infrastructure.Extensions;
 using ControlApp.Infrastructure.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlApp.Infrastructure.Repositories;
@@ -95,5 +96,20 @@ public class ProductRepository : IProductsRepository
         var product = await _dbContext.Products.FindAsync(productEntity.Id);
         productEntity.CopyDataToModel(product!);
         return await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<int> IncreaceCount(int count, int productId)
+    {
+
+        var product = await _dbContext.Products.FindAsync(productId);
+        product!.Count += count;
+        return await _dbContext.SaveChangesAsync();
+    }
+
+    public Task<int> GetCount(int productId)
+    {
+        var param = new SqlParameter("id", productId);
+        var model = _dbContext.Database.SqlQueryRaw<ProductCount>("SELECT Count FROM Products WHERE Id = @id", param);
+        return Task.FromResult(model.First().Count);
     }
 }

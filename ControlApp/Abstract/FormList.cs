@@ -1,4 +1,5 @@
 ﻿using ControlApp.Core.Entities;
+using ControlApp.Core.Interfaces;
 using ControlApp.Extensions;
 using ControlApp.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ public partial class FormList<TEntity> : Form
     where TEntity : IEntity, new()
 {
     private readonly IGenericRepository<TEntity> _repository;
+    private readonly IEntityService<TEntity> _service;
     private readonly IEntityListUserControl<TEntity> _userControl;
 
     public FormList()
@@ -19,10 +21,12 @@ public partial class FormList<TEntity> : Form
 
     public FormList(
         IGenericRepository<TEntity> repository
+      , IEntityService<TEntity> service
       , IEntityListUserControl<TEntity> userControl)
         : this()
     {
         this._repository = repository;
+        this._service = service;
         this._userControl = userControl;
         this.Load += FormList_Load;
         panel1.Controls.Add((Control)_userControl);
@@ -46,7 +50,7 @@ public partial class FormList<TEntity> : Form
 
         if (detailForm.ShowDialog() == DialogResult.OK)
         {
-            await _repository.AddItem((TEntity)detailForm.Entity);
+            //await _repository.AddItem((TEntity)detailForm.Entity);
             await Reload();
         }
     }
@@ -66,7 +70,7 @@ public partial class FormList<TEntity> : Form
 
             if (detailForm.ShowDialog() == DialogResult.OK)
             {
-                await _repository.UpdateItem((TEntity)detailForm.Entity);
+                //await _repository.UpdateItem((TEntity)detailForm.Entity);
                 await Reload();
             }
         }
@@ -88,8 +92,17 @@ public partial class FormList<TEntity> : Form
                     .SelectedEntities.Select(item => item.Id)
                     .ToArray();
 
-                await _repository.DeleteItems(ids);
-                await Reload();
+                //await _repository.DeleteItems(ids);
+                var result = await _service.DeleteAsync(ids[0]);
+
+                if (result.Status != OperationResultStatus.Error)
+                {
+                    await Reload();
+                }
+                else
+                {
+                    MessageBox.Show(string.Join("\n", result.Errors));
+                }
             }
         }
     }

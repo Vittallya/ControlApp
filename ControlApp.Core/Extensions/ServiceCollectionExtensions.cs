@@ -1,4 +1,5 @@
-﻿using ControlApp.Core.Interfaces;
+﻿using ControlApp.Core.Entities;
+using ControlApp.Core.Interfaces;
 using ControlApp.Core.Services;
 using ControlApp.Core.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,5 +12,9 @@ public static class ServiceCollectionExtensions
     {
         serviceCollection.AddTransient<ILoginService, LoginService>();
         serviceCollection.AddTransient<IReportService, WordReportService>();
+
+        serviceCollection.AddTransient<IEntityService<ProductIncomeEntity>, ProductIncomeService>();
+        serviceCollection.AddTransient<IEntityService<ProductReturnEntity>, ProductReturnService>();
+        serviceCollection.AddTransient<IEntityService<ProductSaleEntity>, ProductSaleService>();
     }
 }

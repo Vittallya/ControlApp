@@ -2,7 +2,7 @@
 
 namespace ControlApp.Core.Entities;
 
-public class ProductIncomeEntity : IEntity
+public class ProductIncomeEntity : IEntity, ICloneable
 {
     public ProductIncomeEntity()
     {
@@ -16,4 +16,9 @@ public class ProductIncomeEntity : IEntity
     public string? Additional { get; set; }
     public ProductEntity? ProductEntity { get; set; }
     public string? ProductName => ProductEntity?.Name;
+
+    public object Clone()
+    {
+        return this.MemberwiseClone();
+    }
 }
